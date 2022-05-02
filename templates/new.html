@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+   <body>
+   
+      <h3>Colors - Flask SQLAlchemy example</h3>
+      <hr/>
+      
+      {%- for category, message in get_flashed_messages(with_categories = true) %}
+         <div class = "alert alert-danger">
+            {{ message }}
+         </div>
+      {%- endfor %}
+      
+      <form action = "{{ request.path }}" method = "post">
+         <label for = "id">ID</label><br>
+         <input type = "text" name = "id" placeholder = "id" /><br>
+         <label for = "name">Name</label><br>
+         <input type = "text" name = "name" placeholder = "name" /><br>
+         <label for = "rgb">RGB</label><br>
+         <input type = "text" name = "rgb" placeholder = "rgb"/><br>
+         <label for = "is_trans">is_trans</label><br>
+         <input type = "text" name = "is_trans" placeholder = "True or False" /><br>
+         <input type = "submit" value = "Submit" />
+      </form>
+      
+   </body>
+</html>
