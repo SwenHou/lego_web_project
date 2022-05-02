@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang = "en">
+   <head></head>
+   <body>
+      
+      <h3>
+         <a href = "{{ url_for('show_all') }}">Comments - Flask 
+            SQLAlchemy example</a>
+      </h3>
+      
+      <hr/>
+      {%- for message in get_flashed_messages() %}
+         {{ message }}
+      {%- endfor %}
+		
+      <h3>Colors (<a href = "{{ url_for('new') }}">Add Color
+         </a>)</h3>
+      
+      <table>
+         <thead>
+            <tr>
+               <th>ID</th>
+               <th>Name</th>
+               <th>RGB</th>
+               <th>is_trans</th>
+            </tr>
+         </thead>
+         
+         <tbody>
+            {% for color in colors %}
+               <tr>
+                  <td>{{ color.id }}</td>
+                  <td>{{ color.name }}</td>
+                  <td>{{ color.rgb }}</td>
+                  <td>{{ color.is_trans }}</td>
+               </tr>
+            {% endfor %}
+         </tbody>
+      </table>
+      
+   </body>
+</html>
