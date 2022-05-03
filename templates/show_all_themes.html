@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang = "en">
+   <head></head>
+   <body>
+      
+
+      <h2>
+         <a href = "{{ url_for('index') }}">Back to Main Page</a>
+      </h2>
+
+
+      <h3>
+         <a href = "{{ url_for('show_all_themes') }}">Show All Themes</a>
+      </h3>
+      
+      <hr/>
+      {%- for message in get_flashed_messages() %}
+         {{ message }}
+      {%- endfor %}
+		
+      <h3>Themes (<a href = "{{ url_for('new_themes') }}">Add Themes
+         </a>)</h3>
+      
+      <table>
+         <thead>
+            <tr>
+               <th>ID</th>
+               <th>Name</th>
+               <th>Parent ID</th>
+            </tr>
+         </thead>
+         
+         <tbody>
+            {% for t in themes %}
+               <tr>
+                  <td>{{ t.id }}</td>
+                  <td>{{ t.name }}</td>
+                  <td>{{ t.parent_id }}</td>
+               </tr>
+            {% endfor %}
+         </tbody>
+      </table>
+      
+   </body>
+</html>

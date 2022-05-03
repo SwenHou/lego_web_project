@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang = "en">
+   <head></head>
+   <body>
+      
+
+      <h2>
+         <a href = "{{ url_for('index') }}">Back to Main Page</a>
+      </h2>
+
+
+      <h3>
+         <a href = "{{ url_for('show_all_part_categories') }}">Show All Part Categories</a>
+      </h3>
+      
+      <hr/>
+      {%- for message in get_flashed_messages() %}
+         {{ message }}
+      {%- endfor %}
+		
+      <h3>Part Categories (<a href = "{{ url_for('new_part_categories') }}">Add Part Categories
+         </a>)</h3>
+      
+      <table>
+         <thead>
+            <tr>
+               <th>ID</th>
+               <th>Name</th>
+            </tr>
+         </thead>
+         
+         <tbody>
+            {% for c in part_categories %}
+               <tr>
+                  <td>{{ c.id }}</td>
+                  <td>{{ c.name }}</td>
+               </tr>
+            {% endfor %}
+         </tbody>
+      </table>
+      
+   </body>
+</html>

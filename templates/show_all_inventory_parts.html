@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang = "en">
+   <head></head>
+   <body>
+      
+
+      <h2>
+         <a href = "{{ url_for('index') }}">Back to Main Page</a>
+      </h2>
+
+
+      <h3>
+         <a href = "{{ url_for('show_all_inventory_parts') }}">Show First 1000 Inventory Parts</a>
+      </h3>
+      
+      <hr/>
+      {%- for message in get_flashed_messages() %}
+         {{ message }}
+      {%- endfor %}
+		
+      <h3>Inventory Parts (<a href = "{{ url_for('new_inventory_parts') }}">Add Inventory Parts
+         </a>)</h3>
+      
+      <table>
+         <thead>
+            <tr>
+               <th>Inventory ID</th>
+               <th>Part Number</th>
+               <th>Color ID</th>
+               <th>Quantity</th>
+               <th>Is Spare</th>
+            </tr>
+         </thead>
+         
+         <tbody>
+            {% for s in inventory_parts %}
+               <tr>
+                  <td>{{ s.inventory_id }}</td>
+                  <td>{{ s.part_num }}</td>
+                  <td>{{ s.color_id }}</td>
+                  <td>{{ s.quantity }}</td>
+                  <td>{{ s.is_spare }}</td>
+               </tr>
+            {% endfor %}
+         </tbody>
+      </table>
+      
+   </body>
+</html>

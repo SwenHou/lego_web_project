@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang = "en">
+   <head></head>
+   <body>
+      
+
+      <h2>
+         <a href = "{{ url_for('index') }}">Back to Main Page</a>
+      </h2>
+
+
+      <h3>
+         <a href = "{{ url_for('show_all_sets') }}">Show All Sets</a>
+      </h3>
+      
+      <hr/>
+      {%- for message in get_flashed_messages() %}
+         {{ message }}
+      {%- endfor %}
+		
+      <h3>Sets (<a href = "{{ url_for('new_sets') }}">Add Sets
+         </a>)</h3>
+      
+      <table>
+         <thead>
+            <tr>
+               <th>Set Number</th>
+               <th>Name</th>
+               <th>Year</th>
+               <th>Theme ID</th>
+               <th>Number of Parts</th>
+            </tr>
+         </thead>
+         
+         <tbody>
+            {% for s in sets %}
+               <tr>
+                  <td>{{ s.set_num }}</td>
+                  <td>{{ s.name }}</td>
+                  <td>{{ s.year }}</td>
+                  <td>{{ s.theme_id }}</td>
+                  <td>{{ s.num_parts }}</td>
+               </tr>
+            {% endfor %}
+         </tbody>
+      </table>
+      
+   </body>
+</html>

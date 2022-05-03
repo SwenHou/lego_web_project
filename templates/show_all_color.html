@@ -3,9 +3,14 @@
    <head></head>
    <body>
       
+
+      <h2>
+         <a href = "{{ url_for('index') }}">Back to Main Page</a>
+      </h2>
+
+
       <h3>
-         <a href = "{{ url_for('show_all') }}">Comments - Flask 
-            SQLAlchemy example</a>
+         <a href = "{{ url_for('show_all_color') }}">Show All Colors</a>
       </h3>
       
       <hr/>
@@ -13,7 +18,7 @@
          {{ message }}
       {%- endfor %}
 		
-      <h3>Colors (<a href = "{{ url_for('new') }}">Add Color
+      <h3>Colors (<a href = "{{ url_for('new_color') }}">Add Color
          </a>)</h3>
       
       <table>

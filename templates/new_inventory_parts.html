@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+   <body>
+   
+      <h3>Inventory Parts</h3>
+      <hr/>
+      
+      {%- for category, message in get_flashed_messages(with_categories = true) %}
+         <div class = "alert alert-danger">
+            {{ message }}
+         </div>
+      {%- endfor %}
+      
+      <form action = "{{ request.path }}" method = "post">
+         <label for = "inventory_id">Inventory ID</label><br>
+         <input type = "text" name = "inventory_id" placeholder = "inventory id" /><br>
+         <label for = "part_num">Part Number</label><br>
+         <input type = "text" name = "part_num" placeholder = "part number" /><br>
+         <label for = "color_id">Color ID</label><br>
+         <input type = "text" name = "color_id" placeholder = "color id" /><br>
+         <label for = "quantity">Quantity</label><br>
+         <input type = "text" name = "quantity" placeholder = "quantity" /><br>
+         <label for = "is_spare">Is Spare?</label><br>
+         <input type = "text" name = "is_spare" placeholder = "True or False" /><br>
+         <input type = "submit" value = "Submit" />
+      </form>
+      
+   </body>
+</html>
