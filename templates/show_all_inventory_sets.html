@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang = "en">
+   <head></head>
+   <body>
+      
+
+      <h2>
+         <a href = "{{ url_for('index') }}">Back to Main Page</a>
+      </h2>
+
+
+      <h3>
+         <a href = "{{ url_for('show_all_inventory_sets') }}">Show All Inventory Sets</a>
+      </h3>
+      
+      <hr/>
+      {%- for message in get_flashed_messages() %}
+         {{ message }}
+      {%- endfor %}
+		
+      <h3>Inventory Sets (<a href = "{{ url_for('new_inventory_sets') }}">Add Inventory Sets
+         </a>)</h3>
+      
+      <table>
+         <thead>
+            <tr>
+               <th>Inventory ID</th>
+               <th>Set Number</th>
+               <th>Quantity</th>
+            </tr>
+         </thead>
+         
+         <tbody>
+            {% for i in inventory_sets %}
+               <tr>
+                  <td>{{ i.inventory_id }}</td>
+                  <td>{{ i.set_num }}</td>
+                  <td>{{ i.quantity }}</td>
+               </tr>
+            {% endfor %}
+         </tbody>
+      </table>
+      
+   </body>
+</html>

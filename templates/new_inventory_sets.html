@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+   <body>
+   
+      <h3>Inventory_Sets</h3>
+      <hr/>
+      
+      {%- for category, message in get_flashed_messages(with_categories = true) %}
+         <div class = "alert alert-danger">
+            {{ message }}
+         </div>
+      {%- endfor %}
+      
+      <form action = "{{ request.path }}" method = "post">
+         <label for = "inventory_id">Inventory ID</label><br>
+         <input type = "text" name = "inventory_id" placeholder = "inventory id" /><br>
+         <label for = "set_num">Set Number</label><br>
+         <input type = "text" name = "set_num" placeholder = "set num" /><br>
+         <label for = "quantity">Quantity</label><br>
+         <input type = "text" name = "quantity" placeholder = "quantity" /><br>
+         <input type = "submit" value = "Submit" />
+      </form>
+      
+   </body>
+</html>
