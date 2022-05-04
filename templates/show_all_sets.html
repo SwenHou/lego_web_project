@@ -18,7 +18,10 @@
          {{ message }}
       {%- endfor %}
 		
-      <h3>Sets (<a href = "{{ url_for('new_sets') }}">Add Sets
+      <h3>Sets (<a href = "{{ url_for('new_sets', operation = 'add')}}">Add Sets
+         </a>)(<a href = "{{ url_for('new_sets', operation  = 'update') }}">Update Sets
+         </a>)(<a href = "{{ url_for('new_sets', operation = 'delete') }}">Delete Sets
+         </a>)(<a href = "{{ url_for('new_sets', operation = 'select') }}">Select Sets
          </a>)</h3>
       
       <table>

@@ -228,9 +228,9 @@ def new_color(operation):
 
    return render_template('new_color.html')
 
-@app.route('/new_part_categories', methods = ['GET', 'POST'])
-def new_part_categories():
-   if request.method == 'POST':
+@app.route('/new_part_categories/<operation>', methods = ['GET', 'POST'])
+def new_part_categories(operation):
+   if request.method == 'POST' and operation == 'add':
       if not request.form['id'] or not request.form['name']:
          flash('Please enter all the fields', 'error')
       elif part_categories.query.filter_by(id = request.form['id']).first():
@@ -243,10 +243,58 @@ def new_part_categories():
          
          flash('Record was successfully added')
          return redirect(url_for('show_all_part_categories'))
+
+   if request.method == 'POST' and operation == 'update':
+      if not request.form['id']:
+         flash('Please enter part category id', 'error')
+      elif not part_categories.query.filter_by(id = request.form['id']).first():
+         flash('This part category id does not exists.')
+      else:
+         part_categories.query.filter(part_categories.id == request.form['id']).update({'name': request.form['name']})
+         
+         db.session.commit()
+
+         flash('Record was successfully updated')
+         return redirect(url_for('show_all_part_categories'))
+
+   elif request.method == 'POST' and operation == 'delete':
+      if not request.form['id'] and not request.form['name']:
+         flash('Please enter at least one field to delete record.', 'error')
+      else:
+         result = part_categories.query
+         if request.form['id'] and result.filter(part_categories.id == request.form['id']):
+            result = result.filter(part_categories.id == request.form['id'])
+         if request.form['name'] and result.filter(part_categories.name == request.form['name']):
+            result = result.filter(part_categories.name == request.form['name'])
+         if not result.all():
+            flash('Record does not exists')
+         else:
+            result = result.all()
+            for r in result:
+               db.session.delete(r)
+            db.session.commit()
+
+            flash('Record was successfully deleted')
+            return redirect(url_for('show_all_part_categories'))
+   elif request.method == 'POST' and operation == 'select':
+      if not request.form['id'] and not request.form['name'] and not request.form['rgb'] and not request.form['is_trans']:
+         flash('Please enter at least one field to select record.', 'error')
+      else:
+         result = part_categories.query
+         if request.form['id'] and result.filter(part_categories.id == request.form['id']):
+            result = result.filter(part_categories.id == request.form['id'])
+         if request.form['name'] and result.filter(part_categories.name == request.form['name']):
+            result = result.filter(part_categories.name == request.form['name'])
+
+         if not result.all():
+            flash('Record does not exists')
+         else:
+            result = result.all()
+            return render_template('show_all_part_categories.html', part_categories = result)
    return render_template('new_part_categories.html')
 
-@app.route('/new_parts', methods = ['GET', 'POST'])
-def new_parts():
+@app.route('/new_parts/<operation>', methods = ['GET', 'POST'])
+def new_parts(operation):
    if request.method == 'POST':
       if not request.form['parts_num'] or not request.form['name'] or not request.form['part_cat_id']:
          flash('Please enter all the fields', 'error')
@@ -262,8 +310,8 @@ def new_parts():
          return redirect(url_for('show_all_parts'))
    return render_template('new_parts.html')
 
-@app.route('/new_themes', methods = ['GET', 'POST'])
-def new_themes():
+@app.route('/new_themes/<operation>', methods = ['GET', 'POST'])
+def new_themes(operation):
    if request.method == 'POST':
       if not request.form['id'] or not request.form['name'] or not request.form['parent_id']:
          flash('Please enter all the fields', 'error')
@@ -279,8 +327,8 @@ def new_themes():
          return redirect(url_for('show_all_themes'))
    return render_template('new_themes.html')
 
-@app.route('/new_sets', methods = ['GET', 'POST'])
-def new_sets():
+@app.route('/new_sets/<operation>', methods = ['GET', 'POST'])
+def new_sets(operation):
    if request.method == 'POST':
       if not request.form['set_num'] or not request.form['name'] or not request.form['year'] or not request.form['theme_id'] or not request.form['num_parts']:
          flash('Please enter all the fields', 'error')
@@ -296,8 +344,8 @@ def new_sets():
          return redirect(url_for('show_all_sets'))
    return render_template('new_sets.html')
 
-@app.route('/new_inventories', methods = ['GET', 'POST'])
-def new_inventories():
+@app.route('/new_inventories/<operation>', methods = ['GET', 'POST'])
+def new_inventories(operation):
    if request.method == 'POST':
       if not request.form['id'] or not request.form['verion'] or not request.form['set_num']:
          flash('Please enter all the fields', 'error')
@@ -313,8 +361,8 @@ def new_inventories():
          return redirect(url_for('show_all_inventories'))
    return render_template('new_inventories.html')
 
-@app.route('/new_inventory_sets', methods = ['GET', 'POST'])
-def new_inventory_sets():
+@app.route('/new_inventory_sets/<operation>', methods = ['GET', 'POST'])
+def new_inventory_sets(operation):
    if request.method == 'POST':
       if not request.form['inventory_id'] or not request.form['set_num'] or not request.form['quantity']:
          flash('Please enter all the fields', 'error')
@@ -330,8 +378,8 @@ def new_inventory_sets():
          return redirect(url_for('show_all_inventory_sets'))
    return render_template('new_inventory_sets.html')
 
-@app.route('/new_inventory_parts', methods = ['GET', 'POST'])
-def new_inventory_parts():
+@app.route('/new_inventory_parts/<operation>', methods = ['GET', 'POST'])
+def new_inventory_parts(operation):
    if request.method == 'POST':
       if not request.form['inventory_id'] or not request.form['part_num'] or not request.form['color_id'] or not request.form['quantity'] or not request.form['is_spare']:
          flash('Please enter all the fields', 'error')

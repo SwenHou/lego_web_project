@@ -18,7 +18,10 @@
          {{ message }}
       {%- endfor %}
 		
-      <h3>Part Categories (<a href = "{{ url_for('new_part_categories') }}">Add Part Categories
+      <h3>Part Categories (<a href = "{{ url_for('new_part_categories', operation = 'add') }}">Add Part Categories
+         </a>)(<a href = "{{ url_for('new_part_categories', operation  = 'update') }}">Update Part Categories
+         </a>)(<a href = "{{ url_for('new_part_categories', operation = 'delete') }}">Delete Part Categories
+         </a>)(<a href = "{{ url_for('new_part_categories', operation = 'select') }}">Select Part Categories
          </a>)</h3>
       
       <table>

@@ -18,7 +18,10 @@
          {{ message }}
       {%- endfor %}
 		
-      <h3>Inventories (<a href = "{{ url_for('new_inventories') }}">Add Inventories
+      <h3>Inventories (<a href = "{{ url_for('new_inventories', operation = 'add') }}">Add Inventories
+         </a>)(<a href = "{{ url_for('new_inventories', operation  = 'update') }}">Update Inventories
+         </a>)(<a href = "{{ url_for('new_inventories', operation = 'delete') }}">Delete Inventories
+         </a>)(<a href = "{{ url_for('new_inventories', operation = 'select') }}">Select Inventories
          </a>)</h3>
       
       <table>
