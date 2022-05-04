@@ -1,5 +1,6 @@
 from flask import Flask, request, flash, url_for, redirect, render_template
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import or_
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:hsw999810@localhost:5432/lego'
@@ -151,11 +152,13 @@ def show_all_inventory_parts():
 
 
 
-@app.route('/new_color', methods = ['GET', 'POST'])
-def new_color():
-   if request.method == 'POST':
+@app.route('/new_color/<operation>', methods = ['GET', 'POST'])
+def new_color(operation):
+   if request.method == 'POST' and operation == 'add':
       if not request.form['id'] or not request.form['name'] or not request.form['rgb'] or not request.form['is_trans']:
          flash('Please enter all the fields', 'error')
+      elif colors.query.filter_by(id = request.form['id']).first():
+         flash('This color id already exists.')
       else:
          color = colors(request.form['id'], request.form['name'],
             request.form['rgb'], eval(request.form['is_trans']))
@@ -165,6 +168,64 @@ def new_color():
          
          flash('Record was successfully added')
          return redirect(url_for('show_all_color'))
+
+   elif request.method == 'POST' and operation == 'update':
+      if not request.form['id']:
+         flash('Please enter color id', 'error')
+      elif not colors.query.filter_by(id = request.form['id']).first():
+         flash('This color id does not exists.')
+      else:
+         colors.query.filter(colors.id == request.form['id']).update({'name': request.form['name'], 'rgb': request.form['rgb'], 'is_trans': eval(request.form['is_trans'])})
+         
+         db.session.commit()
+
+         flash('Record was successfully updated')
+         return redirect(url_for('show_all_color'))
+
+   elif request.method == 'POST' and operation == 'delete':
+      if not request.form['id'] and not request.form['name'] and not request.form['rgb'] and not request.form['is_trans']:
+         flash('Please enter at least one field to delete record.', 'error')
+      else:
+         result = colors.query
+         if request.form['id'] and result.filter(colors.id == request.form['id']):
+            result = result.filter(colors.id == request.form['id'])
+         if request.form['name'] and result.filter(colors.name == request.form['name']):
+            result = result.filter(colors.name == request.form['name'])
+         if request.form['rgb'] and result.filter(colors.rgb == request.form['rgb']):
+            result = result.filter(colors.rgb == request.form['rgb'])
+         if request.form['is_trans'] and result.filter(colors.is_trans == eval(request.form['is_trans'])):
+            result = result.filter(colors.is_trans == eval(request.form['is_trans']))
+         
+         if not result.all():
+            flash('Record does not exists')
+         else:
+            result = result.all()
+            for r in result:
+               db.session.delete(r)
+            db.session.commit()
+
+            flash('Record was successfully deleted')
+            return redirect(url_for('show_all_color'))
+   elif request.method == 'POST' and operation == 'select':
+      if not request.form['id'] and not request.form['name'] and not request.form['rgb'] and not request.form['is_trans']:
+         flash('Please enter at least one field to select record.', 'error')
+      else:
+         result = colors.query
+         if request.form['id'] and result.filter(colors.id == request.form['id']):
+            result = result.filter(colors.id == request.form['id'])
+         if request.form['name'] and result.filter(colors.name == request.form['name']):
+            result = result.filter(colors.name == request.form['name'])
+         if request.form['rgb'] and result.filter(colors.rgb == request.form['rgb']):
+            result = result.filter(colors.rgb == request.form['rgb'])
+         if request.form['is_trans'] and result.filter(colors.is_trans == eval(request.form['is_trans'])):
+            result = result.filter(colors.is_trans == eval(request.form['is_trans']))
+
+         if not result.all():
+            flash('Record does not exists')
+         else:
+            result = result.all()
+            return render_template('show_all_color.html', colors = result)
+
    return render_template('new_color.html')
 
 @app.route('/new_part_categories', methods = ['GET', 'POST'])
@@ -172,6 +233,8 @@ def new_part_categories():
    if request.method == 'POST':
       if not request.form['id'] or not request.form['name']:
          flash('Please enter all the fields', 'error')
+      elif part_categories.query.filter_by(id = request.form['id']).first():
+         flash('This part category id already exists.')
       else:
          part_categorie = part_categories(request.form['id'], request.form['name'])
          
@@ -187,6 +250,8 @@ def new_parts():
    if request.method == 'POST':
       if not request.form['parts_num'] or not request.form['name'] or not request.form['part_cat_id']:
          flash('Please enter all the fields', 'error')
+      elif parts.query.filter_by(parts_num = request.form['parts_num']).first():
+         flash('This part number already exists.')
       else:
          part = parts(request.form['parts_num'], request.form['name'], request.form['part_cat_id'])
          
@@ -202,6 +267,8 @@ def new_themes():
    if request.method == 'POST':
       if not request.form['id'] or not request.form['name'] or not request.form['parent_id']:
          flash('Please enter all the fields', 'error')
+      elif themes.query.filter_by(id = request.form['id']).first():
+         flash('This theme id already exists.')
       else:
          theme = themes(request.form['id'], request.form['name'], request.form['parent_id'])
          
@@ -217,6 +284,8 @@ def new_sets():
    if request.method == 'POST':
       if not request.form['set_num'] or not request.form['name'] or not request.form['year'] or not request.form['theme_id'] or not request.form['num_parts']:
          flash('Please enter all the fields', 'error')
+      elif sets.query.filter_by(set_num = request.form['set_num']).first():
+         flash('This set number already exists.')
       else:
          s = sets(request.form['set_num'], request.form['name'], request.form['year'], request.form['theme_id'], request.form['num_parts'])
          
@@ -232,6 +301,8 @@ def new_inventories():
    if request.method == 'POST':
       if not request.form['id'] or not request.form['verion'] or not request.form['set_num']:
          flash('Please enter all the fields', 'error')
+      elif inventories.query.filter_by(id = request.form['id']).first():
+         flash('This inventory id already exists.')
       else:
          inventorie = inventories(request.form['id'], request.form['verion'], request.form['set_num'])
          
@@ -247,6 +318,8 @@ def new_inventory_sets():
    if request.method == 'POST':
       if not request.form['inventory_id'] or not request.form['set_num'] or not request.form['quantity']:
          flash('Please enter all the fields', 'error')
+      elif inventory_sets.query.filter_by(inventory_id = request.form['inventory_id']).first() and inventory_sets.query.filter_by(set_num = request.form['set_num']).first():
+         flash('This inventory set already exists.')
       else:
          i_set = inventory_sets(request.form['inventory_id'], request.form['set_num'], request.form['quantity'])
          
@@ -262,6 +335,8 @@ def new_inventory_parts():
    if request.method == 'POST':
       if not request.form['inventory_id'] or not request.form['part_num'] or not request.form['color_id'] or not request.form['quantity'] or not request.form['is_spare']:
          flash('Please enter all the fields', 'error')
+      elif inventory_parts.query.filter_by(inventory_id = request.form['inventory_id']).first() and inventory_parts.query.filter_by(part_num = request.form['part_num']).first():
+         flash('This inventory part already exists.')
       else:
          i_part = inventory_parts(request.form['inventory_id'], request.form['part_num'], request.form['color_id'], request.form['quantity'], eval(request.form['is_spare']))
          

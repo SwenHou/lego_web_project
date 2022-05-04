@@ -18,8 +18,12 @@
          {{ message }}
       {%- endfor %}
 		
-      <h3>Colors (<a href = "{{ url_for('new_color') }}">Add Color
+      <h3>Colors (<a href = "{{ url_for('new_color', operation = 'add') }}">Add Color
+         </a>)(<a href = "{{ url_for('new_color', operation = 'update') }}">Update Color
+         </a>)(<a href = "{{ url_for('new_color', operation = 'delete') }}">Delete Color
+         </a>)(<a href = "{{ url_for('new_color', operation = 'select') }}">Select Color
          </a>)</h3>
+
       
       <table>
          <thead>
