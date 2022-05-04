@@ -295,7 +295,7 @@ def new_part_categories(operation):
 
 @app.route('/new_parts/<operation>', methods = ['GET', 'POST'])
 def new_parts(operation):
-   if request.method == 'POST':
+   if request.method == 'POST' and operation == 'add':
       if not request.form['parts_num'] or not request.form['name'] or not request.form['part_cat_id']:
          flash('Please enter all the fields', 'error')
       elif parts.query.filter_by(parts_num = request.form['parts_num']).first():
@@ -308,6 +308,57 @@ def new_parts(operation):
          
          flash('Record was successfully added')
          return redirect(url_for('show_all_parts'))
+   elif request.method == 'POST' and operation == 'update':
+      if not request.form['parts_num']:
+         flash('Please enter part number', 'error')
+      elif not parts.query.filter_by(parts_num = request.form['parts_num']).first():
+         flash('This part number does not exists.')
+      else:
+         parts.query.filter(parts.parts_num == request.form['parts_num']).update({'name': request.form['name'], 'part_cat_id': request.form['part_cat_id']})
+         
+         db.session.commit()
+
+         flash('Record was successfully updated')
+         return redirect(url_for('show_all_parts'))
+
+   elif request.method == 'POST' and operation == 'delete':
+      if not request.form['parts_num'] and not request.form['name'] and not request.form['part_cat_id']:
+         flash('Please enter at least one field to delete record.', 'error')
+      else:
+         result = parts.query
+         if request.form['parts_num'] and result.filter(parts.parts_num == request.form['parts_num']):
+            result = result.filter(parts.parts_num == request.form['parts_num'])
+         if request.form['name'] and result.filter(parts.name == request.form['name']):
+            result = result.filter(parts.name == request.form['name'])
+         if request.form['part_cat_id'] and result.filter(parts.part_cat_id == request.form['part_cat_id']):
+            result = result.filter(parts.part_cat_id == request.form['part_cat_id'])
+         if not result.all():
+            flash('Record does not exists')
+         else:
+            result = result.all()
+            for r in result:
+               db.session.delete(r)
+            db.session.commit()
+
+            flash('Record was successfully deleted')
+            return redirect(url_for('show_all_parts'))
+   elif request.method == 'POST' and operation == 'select':
+      if not request.form['parts_num'] and not request.form['name'] and not request.form['part_cat_id']:
+         flash('Please enter at least one field to select record.', 'error')
+      else:
+         result = parts.query
+         if request.form['parts_num'] and result.filter(parts.parts_num == request.form['parts_num']):
+            result = result.filter(parts.parts_num == request.form['parts_num'])
+         if request.form['name'] and result.filter(parts.name == request.form['name']):
+            result = result.filter(parts.name == request.form['name'])
+         if request.form['part_cat_id'] and result.filter(parts.part_cat_id == request.form['part_cat_id']):
+            result = result.filter(parts.part_cat_id == request.form['part_cat_id'])
+         if not result.all():
+            flash('Record does not exists')
+         else:
+            result = result.all()
+            return render_template('show_all_parts.html', parts = result)
+
    return render_template('new_parts.html')
 
 @app.route('/new_themes/<operation>', methods = ['GET', 'POST'])
