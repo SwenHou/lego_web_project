@@ -18,7 +18,10 @@
          {{ message }}
       {%- endfor %}
 		
-      <h3>Themes (<a href = "{{ url_for('new_themes') }}">Add Themes
+      <h3>Themes (<a href = "{{ url_for('new_themes', operation = 'add') }}">Add Themes
+         </a>)(<a href = "{{ url_for('new_themes', operation  = 'update') }}">Update Themes
+         </a>)(<a href = "{{ url_for('new_themes', operation = 'delete') }}">Delete Themes
+         </a>)(<a href = "{{ url_for('new_themes', operation = 'select') }}">Select Themes
          </a>)</h3>
       
       <table>
